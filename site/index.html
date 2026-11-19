@@ -37,7 +37,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Turborel Helm charts</title>
-    <meta name="description" content="Helm charts for running Turborel, the open-source relational database written in Rust, on Kubernetes.">
+    <meta name="description" content="Helm charts for running Turborel on Kubernetes: the open-source relational database for tables, graphs, vectors, JSON, XML, geospatial and full-text search.">
     <link rel="icon" href="assets/favicon.ico" sizes="16x16 32x32 48x48">
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
@@ -47,7 +47,7 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Turborel">
     <meta property="og:title" content="Turborel Helm charts">
-    <meta property="og:description" content="Helm charts for running Turborel on Kubernetes.">
+    <meta property="og:description" content="Helm charts for running Turborel, the open-source relational database, on Kubernetes.">
     <meta property="og:url" content="https://charts.turborel.com/">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#5C282B" media="(prefers-color-scheme: light)">
@@ -270,7 +270,7 @@
         }
 
         pre {
-            margin: 12px 0 0;
+            margin: 0;
             padding: 14px 16px;
             overflow-x: auto;
             white-space: pre-wrap;
@@ -288,6 +288,10 @@
 
         pre code {
             font-size: inherit;
+        }
+
+        .box pre + p {
+            margin-top: 14px;
         }
 
         .box p code {
@@ -313,23 +317,7 @@
             color: #F4B08A;
         }
 
-        .charts {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr));
-            gap: 32px 28px;
-        }
 
-        .chart .meta {
-            margin-top: 14px;
-            padding-top: 10px;
-            border-top: 1px solid #EADBD3;
-            font-size: 14px;
-            color: #6B5A5B;
-        }
-
-        .chart .meta a {
-            margin-right: 14px;
-        }
 
         /* ---- footer -------------------------------------------------------- */
         .footer {
@@ -426,10 +414,6 @@
                 background: #0B0809;
             }
 
-            :where(:root[data-theme="dark"]) .chart .meta {
-                border-top-color: #3A2E2F;
-                color: #A89A93;
-            }
         }
     </style>
 </head>
@@ -471,11 +455,11 @@
         <main>
             <section class="cover">
                 <div>
-                    <h2 class="tagline">Turborel, <em>on Kubernetes</em></h2>
-                    <p class="subline">Helm charts for the relational database written in Rust. Add the repository, install a chart, keep its values in git.</p>
+                    <h2 class="tagline">Relational Is <em>Back</em>, and It Runs on Kubernetes</h2>
+                    <p class="subline">Tables, graphs, vectors, JSON, XML, geospatial and full-text search. One database, embedded or distributed, and now a Helm chart away.</p>
                 </div>
                 <!-- A still life in the site's manner: a database cylinder among Memphis shapes, here with a hexagon for Kubernetes. -->
-                <svg class="still-life" viewBox="0 0 520 330" role="img" aria-label="A database cylinder, a hexagon and drifting geometric shapes">
+                <svg class="still-life" viewBox="0 0 520 330" role="img" aria-label="A database cylinder among small sailing ships, a ship's wheel and drifting geometric shapes">
                     <defs>
                         <pattern id="sl-dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.6" fill="#5C282B"/></pattern>
                         <pattern id="sl-hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="10" stroke="#F1DDD2" stroke-width="3"/></pattern>
@@ -488,38 +472,49 @@
                         <path d="M190 160 A 75 22 0 0 0 340 160 M190 210 A 75 22 0 0 0 340 210" fill="none" stroke="#5C282B" stroke-width="3"/>
                         <ellipse cx="265" cy="110" rx="75" ry="22" fill="#F4B08A"/>
                     </g>
-                    <g class="float f2"><path d="M420 190 l34 20 v40 l-34 20 l-34 -20 v-40 z" fill="none" stroke="#F4B08A" stroke-width="5" stroke-linejoin="round"/></g>
-                    <g class="float f3"><path d="M86 300 L120 240 L154 300 Z" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/></g>
-                    <g class="float"><circle cx="420" cy="120" r="26" fill="none" stroke="#F1DDD2" stroke-width="3"/><circle cx="420" cy="120" r="9" fill="#FFFFFF"/></g>
+                    <!-- a ship's wheel, for the helm -->
+                    <g class="float"><g transform="translate(420 120)" fill="none" stroke="#F1DDD2" stroke-width="3" stroke-linecap="round">
+                        <circle r="22"/><circle r="7" fill="#FFFFFF" stroke="none"/>
+                        <path d="M0 -7V-22M0 7V22M-7 0H-22M7 0H22M-5 -5L-15.6 -15.6M5 5L15.6 15.6M-5 5L-15.6 15.6M5 -5L15.6 -15.6"/>
+                        <path d="M0 -22V-31M0 22V31M-22 0H-31M22 0H31M-15.6 -15.6L-22 -22M15.6 15.6L22 22M-15.6 15.6L-22 22M15.6 -15.6L22 -22" stroke-width="4"/>
+                    </g></g>
+                    <!-- small ships, each a hull, a mast and a sail -->
+                    <g class="float f2"><g transform="translate(372 212)">
+                        <path d="M0 40 H58 L48 54 H10 Z" fill="#F4B08A"/>
+                        <path d="M30 40 V2" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M33 4 L60 36 H33 Z" fill="#E58A5C"/>
+                        <path d="M27 10 L8 36 H27 Z" fill="#F1DDD2"/>
+                    </g></g>
+                    <g class="float f3"><g transform="translate(72 236)">
+                        <path d="M0 44 H66 L54 60 H12 Z" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/>
+                        <path d="M34 44 V0" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M38 4 L68 40 H38 Z" fill="none" stroke="#F4B08A" stroke-width="3" stroke-linejoin="round"/>
+                        <path d="M30 12 L8 40 H30 Z" fill="#F4B08A"/>
+                    </g></g>
+                    <g class="float"><g transform="translate(26 20)">
+                        <path d="M0 22 H34 L28 30 H6 Z" fill="#E58A5C"/>
+                        <path d="M17 22 V2" stroke="#F1DDD2" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M19 3 L34 20 H19 Z" fill="#F1DDD2"/>
+                    </g></g>
+                    <!-- the water under the cylinder -->
+                    <g class="float f3"><path d="M150 300 q16 -10 32 0 t32 0 t32 0 t32 0 t32 0 t32 0 t32 0" fill="none" stroke="#F4B08A" stroke-width="4" stroke-linecap="round"/></g>
                     <g class="float f2" stroke-linecap="round" stroke-width="5">
-                        <line x1="170" y1="60" x2="182" y2="48" stroke="#FFFFFF"/><line x1="380" y1="300" x2="396" y2="294" stroke="#E58A5C"/>
-                        <line x1="40" y1="200" x2="44" y2="214" stroke="#F4B08A"/><line x1="470" y1="290" x2="484" y2="300" stroke="#F1DDD2"/>
+                        <line x1="170" y1="60" x2="182" y2="48" stroke="#FFFFFF"/><line x1="470" y1="60" x2="486" y2="54" stroke="#E58A5C"/>
+                        <line x1="40" y1="150" x2="44" y2="164" stroke="#F4B08A"/><line x1="470" y1="290" x2="484" y2="300" stroke="#F1DDD2"/>
                     </g>
                 </svg>
             </section>
 
+
             <section aria-labelledby="use">
                 <h2 id="use">Add the <em>repository</em></h2>
                 <div class="box">
-                    <p>This page is a Helm repository: its <a href="index.yaml">index.yaml</a> lists every chart and version, each packaged as a <a href="https://github.com/turborel/charts/releases">GitHub release</a> of <code>turborel/charts</code>.</p>
 <pre><code>helm repo add turborel https://charts.turborel.com
-helm repo update
-helm search repo turborel</code></pre>
+helm install turborel turborel/turborel --namespace turborel --create-namespace</code></pre>
+                    <p>The chart runs <code>turboreld</code>, the server, as one StatefulSet with its database on a volume of its own. Its values are in <a href="https://github.com/turborel/charts/tree/main/charts/turborel">charts/turborel</a>, and the manual at <a href="https://turborel.com/docs/">turborel.com/docs</a>.</p>
                 </div>
             </section>
 
-            <section aria-labelledby="charts">
-                <h2 id="charts">The <em>charts</em></h2>
-                <div class="charts">
-                    <article class="box chart">
-                        <h3>turborel</h3>
-                        <p>turboreld, the server, as one StatefulSet: its database on a volume of its own, a Service clients connect to on port 7422, and the server's settings passed as values.</p>
-<pre><code>helm install turborel turborel/turborel \
-  --namespace turborel --create-namespace</code></pre>
-                        <p class="meta"><a href="https://github.com/turborel/charts/tree/main/charts/turborel">Source and values</a><a href="https://turborel.com/docs/">The manual</a></p>
-                    </article>
-                </div>
-            </section>
         </main>
 
         <footer class="footer">
