@@ -15,10 +15,10 @@ the relational database written in Rust, on Kubernetes.
 ## Usage
 
 The charts are published as a Helm repository at
-[charts.turborel.io](https://charts.turborel.io/):
+[charts.turborel.com](https://charts.turborel.com/):
 
 ```
-helm repo add turborel https://charts.turborel.io
+helm repo add turborel https://charts.turborel.com
 helm repo update
 helm install turborel turborel/turborel --namespace turborel --create-namespace
 ```

@@ -41,7 +41,7 @@ helm install turborel charts/turborel --namespace turborel --create-namespace
 ## The page
 
 `site/` is the Helm repository's page, served from the `gh-pages`
-branch at [charts.turborel.io](https://charts.turborel.io/).
+branch at [charts.turborel.com](https://charts.turborel.com/).
 The release workflow copies it there on each push to main that changes
 it; `index.yaml` beside it is chart-releaser's. The page is one file of
 HTML, in the style of [turborel.com](https://turborel.com/).

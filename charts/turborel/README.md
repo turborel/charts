@@ -5,7 +5,7 @@ one StatefulSet, its database on a volume of its own, and a Service
 clients connect to on port 7422.
 
 ```
-helm repo add turborel https://charts.turborel.io
+helm repo add turborel https://charts.turborel.com
 helm install turborel turborel/turborel --namespace turborel --create-namespace
 ```
 
