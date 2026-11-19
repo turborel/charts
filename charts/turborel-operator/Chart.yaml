@@ -1,0 +1,19 @@
+apiVersion: v2
+name: turborel-operator
+description: A Kubernetes operator for Turborel databases, replica groups and backups.
+type: application
+version: 0.1.0
+appVersion: "0.0.1"
+kubeVersion: ">=1.33.0-0"
+home: https://turborel.com
+icon: https://turborel.com/assets/android-chrome-512x512.png
+sources:
+  - https://github.com/turborel/turborel-operator
+  - https://github.com/turborel/charts
+keywords:
+  - turborel
+  - database
+  - operator
+maintainers:
+  - name: bschaatsbergen
+    url: https://github.com/bschaatsbergen

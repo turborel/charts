@@ -1,0 +1,30 @@
+# The operator image also installs the instance manager in each database Pod.
+# No operator image is published yet; point this at your build.
+image:
+  repository: ghcr.io/turborel/turborel-operator
+  tag: ""
+  digest: ""
+  pullPolicy: IfNotPresent
+imagePullSecrets: []
+replicaCount: 1
+
+# Empty watches all namespaces. A name limits the watch and database RBAC to it.
+# The namespace must exist before this chart is installed.
+watchNamespace: ""
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    memory: 512Mi
+
+# Metrics use HTTPS and Kubernetes token authentication and authorization.
+# The serving certificate is self-signed by controller-runtime.
+metrics:
+  enabled: false
+
+podAnnotations: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

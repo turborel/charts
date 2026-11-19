@@ -1,0 +1,7 @@
+The Turborel operator is installed in {{ .Release.Namespace }}.
+
+Create an owner Secret and a database.turborel.com/v1alpha1 Cluster to run a database.
+See https://github.com/turborel/turborel-operator for examples and the current limits.
+
+Helm keeps CRDs on uninstall and does not upgrade them. Before upgrading this chart,
+apply its crds/ directory with kubectl apply --server-side --force-conflicts -f crds/.
