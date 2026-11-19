@@ -27,6 +27,7 @@ Each chart's README says what it installs and the values it takes.
 
 | Chart | What it installs |
 |---|---|
+| [turborel-operator](charts/turborel-operator) | the operator, CRDs and RBAC for Cluster, Backup and ScheduledBackup resources |
 | [turborel](charts/turborel) | turboreld, the server, as one StatefulSet with its database on a volume of its own |
 
 ## How the charts are made
