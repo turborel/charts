@@ -1,0 +1,22 @@
+apiVersion: v2
+name: turborel
+description: Turborel, the relational database written in Rust, served by turboreld on Kubernetes.
+type: application
+# The chart's own version, bumped on every change (semver). appVersion is
+# the release of turboreld it runs, and the image tag by default.
+version: 0.1.0
+appVersion: "0.0.0"
+kubeVersion: ">=1.25.0-0"
+home: https://turborel.com
+icon: https://turborel.com/assets/android-chrome-512x512.png
+sources:
+  - https://github.com/turborel/turborel
+  - https://github.com/turborel/charts
+keywords:
+  - turborel
+  - database
+  - sql
+  - rust
+maintainers:
+  - name: bschaatsbergen
+    url: https://github.com/bschaatsbergen

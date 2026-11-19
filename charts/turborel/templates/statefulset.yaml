@@ -1,0 +1,105 @@
+# One turboreld, its database on a volume of its own. One replica: the
+# chart does not set up replication (REPLICATION.MEMBERS, port 7423).
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "turborel.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "turborel.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  serviceName: {{ include "turborel.headless" . }}
+  selector:
+    matchLabels:
+      {{- include "turborel.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "turborel.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "turborel.serviceAccountName" . }}
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: turboreld
+          image: {{ include "turborel.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - --dir
+            - /var/lib/turborel/data
+            - --set
+            - SERVER.HOST=0.0.0.0
+            {{- range $name, $value := .Values.settings }}
+            - --set
+            - {{ printf "%s=%v" $name $value | quote }}
+            {{- end }}
+          ports:
+            - name: turborel
+              containerPort: 7422
+              protocol: TCP
+          # The server listens once the database is open, which after a
+          # crash takes recovery first.
+          startupProbe:
+            tcpSocket:
+              port: turborel
+            periodSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            tcpSocket:
+              port: turborel
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: turborel
+            periodSeconds: 20
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/turborel
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          {{- toYaml .Values.persistence.accessModes | nindent 10 }}
+        {{- with .Values.persistence.storageClassName }}
+        storageClassName: {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size }}

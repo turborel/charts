@@ -1,0 +1,75 @@
+# Default values for the turborel chart. The server's own settings go in
+# `settings`; everything else is the pod around it. What is not here is
+# left to a kustomize patch or a values file of your own.
+
+image:
+  # No image is published yet: the turborel repository's Dockerfile builds
+  # one (docker build -t turborel .). Point repository and tag at where
+  # you pushed it. tag empty takes the chart's appVersion.
+  repository: ghcr.io/turborel/turborel
+  tag: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+# The server's settings, each passed as `--set NAME=VALUE` as turboreld
+# starts and kept with the database. The names are the manual's
+# (doc/appendix/c-settings.md in the turborel repository). SERVER.HOST is
+# 0.0.0.0 already, so the pod's network reaches the server; SERVER.PORT
+# must stay 7422, the port the Service and the probes use.
+settings: {}
+  # SERVER.MAX_CONNECTIONS: "200"
+  # SERVER.IDLE_TIMEOUT_MS: "600000"
+
+# Where the database is kept: a volume claimed for the pod, mounted at
+# /var/lib/turborel, the database made in its data/ directory.
+persistence:
+  size: 10Gi
+  # Empty takes the cluster's default StorageClass.
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+
+service:
+  type: ClusterIP
+  port: 7422
+  annotations: {}
+
+serviceAccount:
+  create: true
+  # Empty takes the release's full name.
+  name: ""
+  annotations: {}
+
+resources: {}
+  # requests:
+  #   cpu: 500m
+  #   memory: 1Gi
+  # limits:
+  #   memory: 1Gi
+
+# Seconds a pod told to stop is given before it is killed. turboreld lets
+# statements finish for SERVER.SHUTDOWN_TIMEOUT_MS (30 s by default) first.
+terminationGracePeriodSeconds: 60
+
+# The image runs as its nonroot user, 65532, and owns nothing else.
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 65532
+  runAsGroup: 65532
+  fsGroup: 65532
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+podAnnotations: {}
+podLabels: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

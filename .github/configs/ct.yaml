@@ -1,0 +1,10 @@
+# chart-testing (ct) for lint-and-test.yml and for ct run by hand.
+# Reference: https://github.com/helm/chart-testing/blob/main/doc/ct_lint.md
+remote: origin
+target-branch: main
+chart-dirs:
+  - charts
+validate-maintainers: true
+check-version-increment: true
+validate-yaml: true
+helm-extra-args: --timeout 600s

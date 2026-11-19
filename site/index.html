@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- The theme, before anything is drawn: the reader's choice if they made one, else the system's; as on turborel.com -->
+    <script>
+    (function () {
+      var root = document.documentElement, key = "turborel-theme";
+      root.classList.add("js");
+      function saved() {
+        try { var s = localStorage.getItem(key); return s === "dark" || s === "light" ? s : null; } catch (e) { return null; }
+      }
+      var system = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+      function preferred() { return saved() || (system && system.matches ? "dark" : "light"); }
+      function apply(theme) {
+        root.setAttribute("data-theme", theme);
+        root.style.colorScheme = theme;
+        var metas = document.querySelectorAll('meta[name="theme-color"]');
+        for (var i = 0; i < metas.length; i++) metas[i].setAttribute("content", theme === "dark" ? "#120D0E" : "#5C282B");
+        var scheme = document.querySelector('meta[name="color-scheme"]');
+        if (scheme) scheme.setAttribute("content", theme);
+      }
+      window.turborelTheme = { key: key, apply: apply };
+      apply(preferred());
+      function follow() { apply(preferred()); }
+      if (system) {
+        if (system.addEventListener) system.addEventListener("change", follow);
+        else if (system.addListener) system.addListener(follow);
+      }
+      window.addEventListener("storage", function (e) { if (e.key === key) follow(); });
+      window.addEventListener("pageshow", function (e) { if (e.persisted) follow(); });
+      document.addEventListener("DOMContentLoaded", function () { apply(root.getAttribute("data-theme")); });
+      function scrolled() { root.classList.toggle("scrolled", (window.scrollY || 0) > 4); }
+      window.addEventListener("scroll", scrolled, { passive: true });
+      scrolled();
+    })();
+    </script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Turborel Helm charts</title>
+    <meta name="description" content="Helm charts for running Turborel, the open-source relational database written in Rust, on Kubernetes.">
+    <link rel="icon" href="assets/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="canonical" href="https://charts.turborel.io/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Turborel">
+    <meta property="og:title" content="Turborel Helm charts">
+    <meta property="og:description" content="Helm charts for running Turborel on Kubernetes.">
+    <meta property="og:url" content="https://charts.turborel.io/">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#5C282B" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#120D0E" media="(prefers-color-scheme: dark)">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            color-scheme: light;
+            overflow-y: scroll;
+        }
+
+        body {
+            font-family: "Work Sans", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 400;
+            margin: 0;
+            background: #5C282B;
+            color: #F1DDD2;
+        }
+
+        a {
+            color: #F4B08A;
+            text-underline-offset: 3px;
+        }
+
+        a:hover {
+            color: #FFFFFF;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px 10px;
+        }
+
+        /* ---- header: the band across the top, as on turborel.com --------- */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 28px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            padding: 10px max(20px, calc(50% - 530px));
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            color: white;
+            background: #5C282B;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+            font-family: "EB Garamond", serif;
+        }
+
+        .scrolled .header {
+            border-bottom-color: rgba(20, 6, 8, 0.28);
+        }
+
+        @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+            .header {
+                background: rgba(92, 40, 43, 0.88);
+                -webkit-backdrop-filter: blur(24px) saturate(140%);
+                backdrop-filter: blur(24px) saturate(140%);
+            }
+        }
+
+        .header img {
+            display: block;
+            height: 28px;
+            width: auto;
+        }
+
+        .header h1 {
+            margin: 0;
+            line-height: 1;
+            font-size: 22px;
+            font-weight: 400;
+        }
+
+        .header h1 a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .site-nav {
+            order: 1;
+            margin-left: auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 24px;
+            font-family: "Work Sans", sans-serif;
+            font-size: 15px;
+        }
+
+        .site-nav a {
+            color: #F1DDD2;
+            text-decoration: none;
+        }
+
+        .site-nav a:hover {
+            color: #FFFFFF;
+            text-decoration: underline;
+        }
+
+        .theme-toggle {
+            order: 2;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            margin: -6px -8px -6px 0;
+            padding: 0;
+            border: 0;
+            background: none;
+            color: #F1DDD2;
+            cursor: pointer;
+        }
+
+        .theme-toggle[hidden] {
+            display: none;
+        }
+
+        .theme-toggle:hover {
+            color: #FFFFFF;
+        }
+
+        .theme-toggle .sun,
+        :where(:root[data-theme="dark"]) .theme-toggle .moon {
+            display: none;
+        }
+
+        :where(:root[data-theme="dark"]) .theme-toggle .sun {
+            display: block;
+        }
+
+        /* ---- cover: the tagline and the shapes --------------------------- */
+        .cover {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+            gap: 32px;
+            align-items: center;
+            padding: 36px 0 24px;
+        }
+
+        .cover .tagline {
+            margin: 0;
+            font-family: "EB Garamond", serif;
+            font-weight: 500;
+            font-size: clamp(42px, 6vw, 66px);
+            line-height: 1.02;
+            letter-spacing: -0.01em;
+            color: #FFFFFF;
+        }
+
+        .cover .tagline em {
+            font-style: italic;
+            color: #F4B08A;
+        }
+
+        .cover .subline {
+            margin: 18px 0 0;
+            font-family: "EB Garamond", serif;
+            font-style: italic;
+            font-size: clamp(20px, 2.2vw, 24px);
+            line-height: 1.35;
+        }
+
+        .still-life {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* ---- the white cards, with the site's hard shadow ---------------- */
+        .box {
+            padding: 20px 22px;
+            background: white;
+            color: #2A1A1B;
+            box-shadow: 0 2px 4px 0 rgb(36,42,51), 0 18px 0 -9px rgb(28,33,40), 0 19.8px 11px -9px rgb(39,45,54);
+        }
+
+        .box h2, .box h3 {
+            margin: 0 0 10px;
+            font-family: "EB Garamond", serif;
+            font-weight: 600;
+            line-height: 1.15;
+        }
+
+        .box h2 {
+            font-size: 28px;
+        }
+
+        .box h3 {
+            font-size: 24px;
+        }
+
+        .box p {
+            margin: 0 0 10px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .box a {
+            color: #BB3400;
+        }
+
+        .box a:hover {
+            color: #5C282B;
+        }
+
+        pre {
+            margin: 12px 0 0;
+            padding: 14px 16px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            background: #2A1A1B;
+            color: #F1DDD2;
+            font-size: 14px;
+            line-height: 1.55;
+        }
+
+        code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 0.92em;
+        }
+
+        pre code {
+            font-size: inherit;
+        }
+
+        .box p code {
+            padding: 1px 4px;
+            background: #F6EDE8;
+        }
+
+        /* ---- sections ------------------------------------------------------ */
+        section {
+            margin: 28px 0 48px;
+        }
+
+        section > h2 {
+            margin: 0 0 22px;
+            font-family: "EB Garamond", serif;
+            font-weight: 500;
+            font-size: clamp(34px, 4.4vw, 46px);
+            line-height: 1.05;
+            color: #FFFFFF;
+        }
+
+        section > h2 em {
+            color: #F4B08A;
+        }
+
+        .charts {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr));
+            gap: 32px 28px;
+        }
+
+        .chart .meta {
+            margin-top: 14px;
+            padding-top: 10px;
+            border-top: 1px solid #EADBD3;
+            font-size: 14px;
+            color: #6B5A5B;
+        }
+
+        .chart .meta a {
+            margin-right: 14px;
+        }
+
+        /* ---- footer -------------------------------------------------------- */
+        .footer {
+            padding: 18px 0 30px;
+            text-align: center;
+            color: #D9C2B6;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        .footer a {
+            color: #F1DDD2;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #FFFFFF;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 760px) {
+            .cover {
+                grid-template-columns: 1fr;
+            }
+
+            .still-life {
+                max-width: 360px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .float {
+                animation: none;
+            }
+        }
+
+        .float {
+            animation: drift 7s ease-in-out infinite alternate;
+            transform-origin: center;
+        }
+
+        .float.f2 { animation-duration: 9s; }
+        .float.f3 { animation-duration: 11s; }
+
+        @keyframes drift {
+            from { transform: translateY(0); }
+            to { transform: translateY(-8px); }
+        }
+
+        /* dark mode: on when <html data-theme="dark">; the palette of turborel.com */
+        @media screen {
+            :root[data-theme="dark"] {
+                color-scheme: dark;
+            }
+
+            :where(:root[data-theme="dark"]).scrolled .header {
+                border-bottom-color: rgba(0, 0, 0, 0.6);
+            }
+
+            :where(:root[data-theme="dark"]) .header {
+                background: rgba(18, 13, 14, 0.76);
+                -webkit-backdrop-filter: blur(14px) saturate(150%);
+                backdrop-filter: blur(14px) saturate(150%);
+            }
+
+            :where(:root[data-theme="dark"]) body {
+                background: #120D0E;
+            }
+
+            :where(:root[data-theme="dark"]) .box {
+                background: #1C1617;
+                color: #E9E0DB;
+                box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.7), 0 18px 0 -9px #0B0809, 0 19.8px 11px -9px rgba(0, 0, 0, 0.8);
+            }
+
+            :where(:root[data-theme="dark"]) .box a {
+                color: #F0956A;
+            }
+
+            :where(:root[data-theme="dark"]) .box a:hover {
+                color: #F8B795;
+            }
+
+            :where(:root[data-theme="dark"]) .box p code {
+                background: #2C2324;
+            }
+
+            :where(:root[data-theme="dark"]) pre {
+                background: #0B0809;
+            }
+
+            :where(:root[data-theme="dark"]) .chart .meta {
+                border-top-color: #3A2E2F;
+                color: #A89A93;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img width="28" src="assets/turborel-mascot-white.svg" alt="Turborel mascot"><h1><a href="https://turborel.com/">TURBOREL</a></h1>
+        <button class="theme-toggle" type="button" hidden aria-label="Switch to dark mode" title="Switch to dark mode">
+          <svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>
+          <svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>
+        </button>
+        <script>
+        (function () {
+          var button = document.currentScript.previousElementSibling;
+          var t = window.turborelTheme;
+          if (!t) return;
+          function label() {
+            var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+            button.setAttribute("aria-label", "Switch to " + next + " mode");
+            button.setAttribute("title", "Switch to " + next + " mode");
+          }
+          button.hidden = false;
+          label();
+          button.addEventListener("click", function () {
+            var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+            t.apply(next);
+            try { localStorage.setItem(t.key, next); } catch (e) {}
+            label();
+          });
+          new MutationObserver(label).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+        })();
+        </script>
+        <nav class="site-nav" aria-label="Site">
+            <a href="https://turborel.com/docs/">Docs</a>
+            <a href="https://github.com/turborel/charts">GitHub</a>
+            <a href="index.yaml">index.yaml</a>
+        </nav>
+    </header>
+    <div class="container">
+        <main>
+            <section class="cover">
+                <div>
+                    <h2 class="tagline">Turborel, <em>on Kubernetes</em></h2>
+                    <p class="subline">Helm charts for the relational database written in Rust. Add the repository, install a chart, keep its values in git.</p>
+                </div>
+                <!-- A still life in the site's manner: a database cylinder among Memphis shapes, here with a hexagon for Kubernetes. -->
+                <svg class="still-life" viewBox="0 0 520 330" role="img" aria-label="A database cylinder, a hexagon and drifting geometric shapes">
+                    <defs>
+                        <pattern id="sl-dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.6" fill="#5C282B"/></pattern>
+                        <pattern id="sl-hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="10" stroke="#F1DDD2" stroke-width="3"/></pattern>
+                    </defs>
+                    <g class="float f2"><path d="M330 40 A 70 70 0 0 1 470 40 Z" fill="#E58A5C"/></g>
+                    <g class="float f3"><rect x="58" y="70" width="96" height="96" fill="url(#sl-hatch)"/></g>
+                    <g class="float">
+                        <path d="M190 110 L190 260 A 75 22 0 0 0 340 260 L340 110" fill="#F1DDD2"/>
+                        <rect x="190" y="110" width="150" height="150" fill="url(#sl-dots)" opacity=".45"/>
+                        <path d="M190 160 A 75 22 0 0 0 340 160 M190 210 A 75 22 0 0 0 340 210" fill="none" stroke="#5C282B" stroke-width="3"/>
+                        <ellipse cx="265" cy="110" rx="75" ry="22" fill="#F4B08A"/>
+                    </g>
+                    <g class="float f2"><path d="M420 190 l34 20 v40 l-34 20 l-34 -20 v-40 z" fill="none" stroke="#F4B08A" stroke-width="5" stroke-linejoin="round"/></g>
+                    <g class="float f3"><path d="M86 300 L120 240 L154 300 Z" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/></g>
+                    <g class="float"><circle cx="420" cy="120" r="26" fill="none" stroke="#F1DDD2" stroke-width="3"/><circle cx="420" cy="120" r="9" fill="#FFFFFF"/></g>
+                    <g class="float f2" stroke-linecap="round" stroke-width="5">
+                        <line x1="170" y1="60" x2="182" y2="48" stroke="#FFFFFF"/><line x1="380" y1="300" x2="396" y2="294" stroke="#E58A5C"/>
+                        <line x1="40" y1="200" x2="44" y2="214" stroke="#F4B08A"/><line x1="470" y1="290" x2="484" y2="300" stroke="#F1DDD2"/>
+                    </g>
+                </svg>
+            </section>
+
+            <section aria-labelledby="use">
+                <h2 id="use">Add the <em>repository</em></h2>
+                <div class="box">
+                    <p>This page is a Helm repository: its <a href="index.yaml">index.yaml</a> lists every chart and version, each packaged as a <a href="https://github.com/turborel/charts/releases">GitHub release</a> of <code>turborel/charts</code>.</p>
+<pre><code>helm repo add turborel https://charts.turborel.io
+helm repo update
+helm search repo turborel</code></pre>
+                </div>
+            </section>
+
+            <section aria-labelledby="charts">
+                <h2 id="charts">The <em>charts</em></h2>
+                <div class="charts">
+                    <article class="box chart">
+                        <h3>turborel</h3>
+                        <p>turboreld, the server, as one StatefulSet: its database on a volume of its own, a Service clients connect to on port 7422, and the server's settings passed as values.</p>
+<pre><code>helm install turborel turborel/turborel \
+  --namespace turborel --create-namespace</code></pre>
+                        <p class="meta"><a href="https://github.com/turborel/charts/tree/main/charts/turborel">Source and values</a><a href="https://turborel.com/docs/">The manual</a></p>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p><a href="https://turborel.com/">turborel.com</a> &middot; <a href="https://github.com/turborel/turborel">GitHub</a> &middot; <a href="https://github.com/turborel/charts/blob/main/LICENSE">License</a></p>
+            <p>&copy; 2026 Turborel Inc.</p>
+        </footer>
+    </div>
+</body>
+</html>

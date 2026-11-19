@@ -1,3 +1,8 @@
 .DS_Store
 .idea/
 .claude/settings.local.json
+# helm dependency update, helm package and chart-releaser
+charts/*/charts/
+*.tgz
+.cr-release-packages/
+.cr-index/

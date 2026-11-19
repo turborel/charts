@@ -1,0 +1,12 @@
+turboreld is starting as {{ include "turborel.fullname" . }}-0 in {{ .Release.Namespace }}.
+
+It listens in the cluster at
+  {{ include "turborel.fullname" . }}.{{ .Release.Namespace }}.svc:{{ .Values.service.port }}
+
+Connect with the command-line client from your machine:
+
+  kubectl --namespace {{ .Release.Namespace }} port-forward svc/{{ include "turborel.fullname" . }} 7422:{{ .Values.service.port }}
+  turborel --host 127.0.0.1 --port 7422
+
+Users are managed with `turboreld user` on a database no server holds;
+the manual says how (doc/operator/05-users.md in the turborel repository).

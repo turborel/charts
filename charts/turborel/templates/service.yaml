@@ -1,0 +1,41 @@
+# The Service clients connect to, and the headless one the StatefulSet
+# names its pod under (turborel-0.turborel-headless).
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "turborel.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "turborel.labels" . | nindent 4 }}
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: turborel
+      port: {{ .Values.service.port }}
+      targetPort: turborel
+      protocol: TCP
+  selector:
+    {{- include "turborel.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "turborel.headless" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "turborel.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: turborel
+      port: {{ .Values.service.port }}
+      targetPort: turborel
+      protocol: TCP
+  selector:
+    {{- include "turborel.selectorLabels" . | nindent 4 }}
