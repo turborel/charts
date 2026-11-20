@@ -3,6 +3,31 @@ entries:
   turborel:
   - apiVersion: v2
     appVersion: nightly
+    created: "2026-11-20T00:34:34.214083765Z"
+    description: Turborel, the relational database written in Rust, served by turboreld
+      on Kubernetes.
+    digest: 1eaef4aac1560be72e7a7afa4b165363fc50056f86598d96003e7586c5ae6928
+    home: https://turborel.com
+    icon: https://turborel.com/assets/android-chrome-512x512.png
+    keywords:
+    - turborel
+    - database
+    - sql
+    - rust
+    kubeVersion: '>=1.25.0-0'
+    maintainers:
+    - name: bschaatsbergen
+      url: https://github.com/bschaatsbergen
+    name: turborel
+    sources:
+    - https://github.com/turborel/turborel
+    - https://github.com/turborel/charts
+    type: application
+    urls:
+    - https://github.com/turborel/charts/releases/download/turborel-0.1.2/turborel-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: nightly
     created: "2026-11-20T00:13:08.39268904Z"
     description: Turborel, the relational database written in Rust, served by turboreld
       on Kubernetes.
@@ -53,6 +78,30 @@ entries:
     version: 0.1.0
   turborel-operator:
   - apiVersion: v2
+    appVersion: nightly
+    created: "2026-11-20T00:34:34.471370395Z"
+    description: A Kubernetes operator for Turborel databases, replica groups and
+      backups.
+    digest: 4d9c9c14f13a538ab0262f877e7a0f6d24245b8236d6b32ca195dac137fc25e5
+    home: https://turborel.com
+    icon: https://turborel.com/assets/android-chrome-512x512.png
+    keywords:
+    - turborel
+    - database
+    - operator
+    kubeVersion: '>=1.33.0-0'
+    maintainers:
+    - name: bschaatsbergen
+      url: https://github.com/bschaatsbergen
+    name: turborel-operator
+    sources:
+    - https://github.com/turborel/turborel-operator
+    - https://github.com/turborel/charts
+    type: application
+    urls:
+    - https://github.com/turborel/charts/releases/download/turborel-operator-0.1.2/turborel-operator-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     appVersion: 0.0.1
     created: "2026-11-20T00:13:08.65495559Z"
     description: A Kubernetes operator for Turborel databases, replica groups and
@@ -100,4 +149,4 @@ entries:
     urls:
     - https://github.com/turborel/charts/releases/download/turborel-operator-0.1.0/turborel-operator-0.1.0.tgz
     version: 0.1.0
-generated: "2026-11-20T00:13:08.654967482Z"
+generated: "2026-11-20T00:34:34.471391134Z"
