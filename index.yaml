@@ -26,4 +26,29 @@ entries:
     urls:
     - https://github.com/turborel/charts/releases/download/turborel-0.1.0/turborel-0.1.0.tgz
     version: 0.1.0
-generated: "2026-11-19T16:31:20.451041235Z"
+  turborel-operator:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2026-11-20T00:08:57.166500054Z"
+    description: A Kubernetes operator for Turborel databases, replica groups and
+      backups.
+    digest: 330ca382c88df7e530597c64635da7a6db4ea418be0cbb4c9f41de86d84e6bab
+    home: https://turborel.com
+    icon: https://turborel.com/assets/android-chrome-512x512.png
+    keywords:
+    - turborel
+    - database
+    - operator
+    kubeVersion: '>=1.33.0-0'
+    maintainers:
+    - name: bschaatsbergen
+      url: https://github.com/bschaatsbergen
+    name: turborel-operator
+    sources:
+    - https://github.com/turborel/turborel-operator
+    - https://github.com/turborel/charts
+    type: application
+    urls:
+    - https://github.com/turborel/charts/releases/download/turborel-operator-0.1.0/turborel-operator-0.1.0.tgz
+    version: 0.1.0
+generated: "2026-11-20T00:08:57.166509816Z"
