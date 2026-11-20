@@ -4,8 +4,8 @@ description: Turborel, the relational database written in Rust, served by turbor
 type: application
 # The chart's own version, bumped on every change (semver). appVersion is
 # the release of turboreld it runs, and the image tag by default.
-version: 0.1.0
-appVersion: "0.0.0"
+version: 0.1.1
+appVersion: "nightly"
 kubeVersion: ">=1.25.0-0"
 home: https://turborel.com
 icon: https://turborel.com/assets/android-chrome-512x512.png

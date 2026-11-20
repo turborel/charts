@@ -3,9 +3,8 @@
 # left to a kustomize patch or a values file of your own.
 
 image:
-  # No image is published yet: the turborel repository's Dockerfile builds
-  # one (docker build -t turborel .). Point repository and tag at where
-  # you pushed it. tag empty takes the chart's appVersion.
+  # Empty tag uses nightly, the chart's appVersion. Set a commit tag to
+  # pin a tested build.
   repository: ghcr.io/turborel/turborel
   tag: ""
   pullPolicy: IfNotPresent

@@ -6,15 +6,20 @@ clients connect to on port 7422.
 
 ```
 helm repo add turborel https://charts.turborel.com
+helm repo update
 helm install turborel turborel/turborel --namespace turborel --create-namespace
 ```
+
+The default image is `ghcr.io/turborel/turborel:nightly`, containing
+both the server and command-line client. Set `image.tag` to a tested
+commit tag when you need a fixed build.
 
 ## Values
 
 | Value | Default | Meaning |
 |---|---|---|
-| `image.repository` | `ghcr.io/turborel/turborel` | the image, built by the turborel repository's Dockerfile; none is published yet |
-| `image.tag` | `""` | its tag; empty takes the chart's `appVersion` |
+| `image.repository` | `ghcr.io/turborel/turborel` | the published Turborel image |
+| `image.tag` | `""` | its tag; empty uses `nightly`, the chart's `appVersion` |
 | `image.pullPolicy` | `IfNotPresent` | |
 | `imagePullSecrets` | `[]` | |
 | `settings` | `{}` | the server's settings, each passed as `--set NAME=VALUE` and kept with the database |
