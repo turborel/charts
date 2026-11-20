@@ -4,19 +4,15 @@ The Turborel operator, its three CustomResourceDefinitions, and the
 permissions it needs to reconcile databases. A `Cluster` creates the
 database Pods; this chart installs only the operator.
 
-The operator and its API are in alpha. Build an operator image and
-install from this checkout until an operator release is published:
+The operator and its API are in alpha. Kubernetes 1.33 or later is
+required. Install from the Turborel Helm repository:
 
 ```sh
-helm install turborel-operator ./charts/turborel-operator \
-  --namespace turborel-system --create-namespace \
-  --set image.repository=registry.example.com/you/turborel-operator \
-  --set image.tag=dev
+helm repo add turborel https://charts.turborel.com
+helm repo update
+helm install turborel-operator turborel/turborel-operator \
+  --namespace turborel-system --create-namespace
 ```
-
-Use your own registry and tag. The operator image is also used by the
-init container that installs the instance manager in each database Pod.
-Kubernetes 1.33 or later is required.
 
 The [operator README](https://github.com/turborel/turborel-operator)
 covers owner credentials, Cluster examples, connections and backups.
@@ -27,7 +23,7 @@ the operator image here.
 
 | Value | Default | Meaning |
 |---|---|---|
-| `image.repository` | `ghcr.io/turborel/turborel-operator` | the operator image; point this at your build |
+| `image.repository` | `ghcr.io/turborel/turborel-operator` | the operator image |
 | `image.tag` | `""` | empty uses the chart's `appVersion` |
 | `image.digest` | `""` | an immutable digest; overrides the tag |
 | `image.pullPolicy` | `IfNotPresent` | the operator Deployment's pull policy |
@@ -66,12 +62,16 @@ operator checkout, `make chart` refreshes this chart's `crds/` directory.
 
 Helm installs CRDs on the first installation. It does not update them
 on upgrade, or delete them on uninstall. Before an upgrade, apply the
-CRDs from the matching chart version:
+CRDs from the matching chart version. Set `CHART_VERSION` to the
+release you want and use it for both commands:
 
 ```sh
-kubectl apply --server-side --force-conflicts -f charts/turborel-operator/crds/
-helm upgrade turborel-operator ./charts/turborel-operator \
-  --namespace turborel-system --reuse-values --set image.tag=NEW_TAG
+helm repo update
+CHART_VERSION=0.1.1
+helm show crds turborel/turborel-operator --version "$CHART_VERSION" | \
+  kubectl apply --server-side --force-conflicts -f -
+helm upgrade turborel-operator turborel/turborel-operator \
+  --namespace turborel-system --version "$CHART_VERSION" --reuse-values
 ```
 
 Uninstalling the operator leaves its Clusters running without

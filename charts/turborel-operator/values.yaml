@@ -1,5 +1,4 @@
 # The operator image also installs the instance manager in each database Pod.
-# No operator image is published yet; point this at your build.
 image:
   repository: ghcr.io/turborel/turborel-operator
   tag: ""

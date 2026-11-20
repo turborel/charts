@@ -20,6 +20,18 @@ The charts are published as a Helm repository at
 ```
 helm repo add turborel https://charts.turborel.com
 helm repo update
+```
+
+Install the operator to manage databases through `Cluster` resources:
+
+```sh
+helm install turborel-operator turborel/turborel-operator \
+  --namespace turborel-system --create-namespace
+```
+
+To run one server directly:
+
+```sh
 helm install turborel turborel/turborel --namespace turborel --create-namespace
 ```
 
