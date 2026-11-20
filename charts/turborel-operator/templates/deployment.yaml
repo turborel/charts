@@ -45,6 +45,8 @@ spec:
           env:
             - name: OPERATOR_IMAGE
               value: {{ include "turborel-operator.image" . | quote }}
+            - name: OPERATOR_IMAGE_PULL_POLICY
+              value: {{ .Values.image.pullPolicy | quote }}
             - name: WATCH_NAMESPACE
               value: {{ .Values.watchNamespace | quote }}
           ports:

@@ -14,6 +14,8 @@ helm install turborel-operator turborel/turborel-operator \
   --namespace turborel-system --create-namespace
 ```
 
+The default operator image is `ghcr.io/turborel/turborel-operator:nightly`.
+
 The [operator README](https://github.com/turborel/turborel-operator)
 covers owner credentials, Cluster examples, connections and backups.
 The database image is set in `Cluster.spec.image`, separately from
@@ -26,7 +28,7 @@ the operator image here.
 | `image.repository` | `ghcr.io/turborel/turborel-operator` | the operator image |
 | `image.tag` | `""` | empty uses the chart's `appVersion` |
 | `image.digest` | `""` | an immutable digest; overrides the tag |
-| `image.pullPolicy` | `IfNotPresent` | the operator Deployment's pull policy |
+| `image.pullPolicy` | `Always` | pull policy for the operator and its instance-manager init containers |
 | `imagePullSecrets` | `[]` | registry credentials for the operator Deployment |
 | `replicaCount` | `1` | operator processes; leader election permits one active controller |
 | `watchNamespace` | `""` | empty watches all namespaces; otherwise only this existing namespace |
@@ -67,7 +69,7 @@ release you want and use it for both commands:
 
 ```sh
 helm repo update
-CHART_VERSION=0.1.1
+CHART_VERSION=0.1.2
 helm show crds turborel/turborel-operator --version "$CHART_VERSION" | \
   kubectl apply --server-side --force-conflicts -f -
 helm upgrade turborel-operator turborel/turborel-operator \

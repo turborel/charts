@@ -20,7 +20,7 @@ commit tag when you need a fixed build.
 |---|---|---|
 | `image.repository` | `ghcr.io/turborel/turborel` | the published Turborel image |
 | `image.tag` | `""` | its tag; empty uses `nightly`, the chart's `appVersion` |
-| `image.pullPolicy` | `IfNotPresent` | |
+| `image.pullPolicy` | `Always` | |
 | `imagePullSecrets` | `[]` | |
 | `settings` | `{}` | the server's settings, each passed as `--set NAME=VALUE` and kept with the database |
 | `persistence.size` | `10Gi` | the volume the database is kept on |

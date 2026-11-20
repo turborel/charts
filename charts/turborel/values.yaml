@@ -7,7 +7,7 @@ image:
   # pin a tested build.
   repository: ghcr.io/turborel/turborel
   tag: ""
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 imagePullSecrets: []
 
